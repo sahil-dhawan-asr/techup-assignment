@@ -149,12 +149,10 @@ php artisan db:seed
 -   **Email:** `admin@techuplabs.com`
 -   **Password:** `12345678`
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## Contact
 
 ---
 
-Feel free to contact us if you need any clarifications or further assistance.
+Feel free to contact if you need any clarifications or further assistance.
 
 ---
