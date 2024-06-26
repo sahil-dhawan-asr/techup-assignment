@@ -1,64 +1,160 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Task Management API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains the implementation of a Task Management API using Laravel. The API supports user authentication and allows users to create and retrieve tasks with associated notes and attachments.
 
-## About Laravel
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Clone the repository:**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    ```sh
+    git clone https://github.com/sahil-dhawan-asr/techup-assignment.git
+    cd task-management-api
+    ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. **Install dependencies:**
 
-## Learning Laravel
+    ```sh
+    composer install
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Set up the environment:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ```sh
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
-## Laravel Sponsors
+4. **Configure the `.env` file** with your database and other configurations.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+5. **Run migrations:**
 
-### Premium Partners
+    ```sh
+    php artisan migrate
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+6. **Install and configure Laravel Sanctum:**
 
-## Contributing
+    ```sh
+    php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+    php artisan migrate
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. **Seed the database for a test user:**
+    ```sh
+    php artisan db:seed
+    ```
 
-## Code of Conduct
+## Authentication
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Register a new user
 
-## Security Vulnerabilities
+-   **Endpoint:** `POST /register`
+-   **Body:**
+    ```json
+    {
+        "name": "User Name",
+        "email": "user@example.com",
+        "password": "password"
+    }
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Login and get a token
+
+-   **Endpoint:** `POST /login`
+-   **Body:**
+    ```json
+    {
+        "email": "user@example.com",
+        "password": "password"
+    }
+    ```
+
+### Logout and revoke a token
+
+-   **Endpoint:** `POST /logout`
+-   **Header:**
+    ```json
+    {
+        "Authorization": "Bearer your_token"
+    }
+    ```
+
+## Tasks
+
+### Create a task with notes and attachments
+
+-   **Endpoint:** `POST /tasks`
+-   **Header:**
+    ```json
+    {
+        "Authorization": "Bearer your_token"
+    }
+    ```
+-   **Body:**
+    ```json
+    {
+        "subject": "Task Subject",
+        "description": "Task Description",
+        "start_date": "2024-06-01",
+        "due_date": "2024-06-30",
+        "status": "New",
+        "priority": "High",
+        "notes": [
+            {
+                "subject": "Note 1",
+                "note": "Note 1 content",
+                "attachments": [file1, file2]
+            },
+            {
+                "subject": "Note 2",
+                "note": "Note 2 content",
+                "attachments": [file3]
+            }
+        ]
+    }
+    ```
+
+### Retrieve all tasks with notes
+
+-   **Endpoint:** `GET /tasks`
+-   **Header:**
+    ```json
+    {
+        "Authorization": "Bearer your_token"
+    }
+    ```
+
+## Filters
+
+You can filter tasks by status, due date, priority, and notes using query parameters:
+
+-   `filter[status]`: Filter by task status (e.g., `New`, `Incomplete`, `Complete`)
+-   `filter[due_date]`: Filter tasks due on or before a specific date (e.g., `2024-06-30`)
+-   `filter[priority]`: Filter by task priority (e.g., `High`, `Medium`, `Low`)
+
+## Sorting
+
+Tasks are ordered by priority (`High` first) and then by the maximum count of notes.
+
+## Test User
+
+Execute the database seeder to create a test user:
+
+```sh
+php artisan db:seed
+```
+
+**Test User Credentials:**
+
+-   **Email:** `admin@techuplabs.com`
+-   **Password:** `12345678`
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+Feel free to contact us if you need any clarifications or further assistance.
+
+---
