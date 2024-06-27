@@ -8,7 +8,6 @@ use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller

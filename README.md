@@ -46,6 +46,10 @@ This repository contains the implementation of a Task Management API using Larav
 
 ## Authentication
 
+###
+
+For validation form requests is used
+
 ### Register a new user
 
 -   **Endpoint:** `POST /register`

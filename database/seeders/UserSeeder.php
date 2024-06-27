@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        // these creds can be defined in constant as well for now it's defined here
         User::updateOrCreate(["email"=>"admin@techuplabs.com"],[
             "name"=>"admin","email"=>"admin@techuplabs.com",
             "password"=>bcrypt("12345678"),"email_verified_at"=>Carbon::now()
